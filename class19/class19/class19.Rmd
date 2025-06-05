@@ -1,0 +1,41 @@
+---
+title: "class19"
+author: "Muhammad Tariq"
+date: "2025-06-03"
+output: pdf_document
+---
+
+>Q1 What protein do these sequences correspond to? (Give both full gene/protein name
+and official symbol)?
+Full Protein Name: Tyrosine-protein kinase JAK2 isoform aOfficial 
+Gene Symbol: JAK2
+
+```{r}
+library(bio3d)
+s <- read.fasta("A15583449_mutant_seq.fa")
+s
+```
+
+Approaches:
+- Open in Seaview and use your eyes or a sonsensus sequence
+
+- Ask ChatGPT
+
+- Read fasta using bio3d
+
+```{r}
+scores <- conserv(s)
+scores
+```
+
+```{r}
+mutant.position <- which(scores < 1)
+mutant.position
+```
+```{r}
+s$ali[,mutant.position]
+```
+```{r}
+paste(s$ali[1,mutant.position])
+```
+

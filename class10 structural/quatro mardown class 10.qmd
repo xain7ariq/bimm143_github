@@ -1,0 +1,119 @@
+---
+title: "Class10 strutural"
+author: "Muhammad Tariq"
+format: pdf
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(bio3d)
+library(NGLVieweR)
+library(bio3dview)
+library(ggplot2)
+library(ggrepel)
+```
+
+```{r}
+library(bio3d)
+pdb <- read.pdb("1hsg")
+```
+
+
+## Q1: Percentage solved by X-Ray and Electron Microscopy
+```{r}
+total_structures <- 203169 + 13047 + 14528 + 4687 + 213 + 22
+xray_total <- 172081 + 10027 + 8849 + 2947 + 170 + 11
+em_total <- 18135 + 2974 + 5386 + 185 + 10 + 0
+xray_percent <- round((xray_total / total_structures) * 100, 2)
+em_percent <- round((em_total / total_structures) * 100, 2)
+list(XRay = xray_percent, EM = em_percent)
+```
+
+## Q2: Proportion of protein-only structures
+```{r}
+protein_only <- 203169
+protein_proportion <- round((protein_only / total_structures) * 100, 2)
+protein_proportion
+```
+
+## Q3: Number of HIV-1 protease structures
+**Answer**: Use the [RCSB search for HIV-1 protease](https://www.rcsb.org/). At the time of writing, there are ~395 structures.
+
+## Q4: Why do water molecules appear as single atoms?
+**Answer**: X-ray crystallography typically resolves only the oxygen atom of water, hence only one atom per water molecule appears.
+
+## Q5: Conserved water molecule residue number?
+**Answer**: The conserved water molecule in 1HSG is residue number HOH 301 or similar (check Mol* under Ligands > Water > Hover labels).
+
+## Q6: Save a figure showing both chains, ligand, ASP25 and critical water
+**Answer**: Done via Mol*, screenshot saved manually and added to report.
+
+## Q7: Binding Site Discussion
+**Answer**: Indinavir and similar inhibitors enter the binding pocket via a flap opening mechanism in the protease dimer. Structural plasticity allows entry.
+
+## Q8: Number of amino acid residues in 1HSG
+```{r}
+pdb <- read.pdb("1hsg")
+length(unique(pdb$atom$resno[pdb$atom$type == "ATOM"]))
+```
+
+## Q9: Name a non-protein residue
+```{r}
+unique(pdb$atom$resid[!(pdb$atom$resid %in% c("ALA", "VAL", "ILE", "GLY", "GLU", "ASP", "TYR", "TRP", "PHE", "ASN", "GLN", "CYS", "HIS", "LYS", "ARG", "SER", "THR", "MET", "PRO"))])
+```
+
+## Q10: Which package is from Bioconductor?
+**Answer**: `msa`
+
+## Q11: Which package is from GitHub?
+**Answer**: `bio3dview` (from `bioboot/bio3dview`)
+
+## Q12: Can `pak` install from GitHub?
+**Answer**: TRUE
+
+## Q13: Length of ADK sequence (1AKE_A)
+```{r}
+aa <- get.seq("1ake_A")
+length(aa$ali)
+```
+
+## Q14: Normal Mode Analysis observation
+```{r}
+hits <- list(pdb.id = c('1AKE_A','6S36_A','6RZE_A','3HPR_A','1E4V_A','5EJE_A','1E4Y_A','3X2S_A','6HAP_A','6HAM_A','4K46_A','3GMT_A','4PZL_A'))
+files <- get.pdb(hits$pdb.id, path="pdbs", split=TRUE, gzip=TRUE)
+pdbs <- pdbaln(files, fit = TRUE, exefile="msa")
+rd <- rmsd(pdbs)
+hc.rd <- hclust(dist(rd))
+grps.rd <- cutree(hc.rd, k=3)
+modes <- nma(pdbs)
+plot(modes, pdbs, col=grps.rd)
+```
+**Answer**: The black and colored lines indicate variance in flexibility. They differ most in flexible loop regions—these regions correspond to conformational transitions important for Adk function.
+
+## OPTIONAL: View PCA in interactive widget
+```{r}
+pc.xray <- pca(pdbs)
+view.pca(pc.xray)
+```
+
+## OPTIONAL: Export trajectory and load into Mol*
+```{r}
+pc1 <- mktrj(pc.xray, pc=1, file="pc_1.pdb")
+```
+**Instructions**: Open `pc_1.pdb` in [Mol*](https://molstar.org/viewer/) and click the “play” icon to view animated PC1 motion.
+
+## OPTIONAL: ggplot-based PCA Plot
+```{r}
+ids <- basename.pdb(pdbs$id)
+df <- data.frame(PC1=pc.xray$z[,1], 
+                 PC2=pc.xray$z[,2], 
+                 col=as.factor(grps.rd),
+                 ids=ids)
+
+p <- ggplot(df) + 
+  aes(PC1, PC2, col=col, label=ids) +
+  geom_point(size=2) +
+  geom_text_repel(max.overlaps = 20) +
+  theme(legend.position = "none")
+p
+```

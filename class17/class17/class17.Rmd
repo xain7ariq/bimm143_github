@@ -1,0 +1,108 @@
+---
+title: "class17"
+author: "Muhammad Tariq"
+date: "2025-06-02"
+output: pdf_document
+---
+```{r}
+BiocManager::install("tximport")
+
+```
+
+
+```{r}
+library(ggplot2)
+library(jsonlite)
+library(BiocManager)
+library(tximport)
+```
+
+## Import Kallisto Output from abundance.h5 Files
+
+```{r}
+files <- c(
+  "SRR2156848" = "SRR2156848_quant/abundance.h5",
+  "SRR2156849" = "SRR2156849_quant/abundance.h5",
+  "SRR2156850" = "SRR2156850_quant/abundance.h5",
+  "SRR2156851" = "SRR2156851_quant/abundance.h5")
+
+```
+## Read and Combine Kallisto abundance.tsv Files (Manual Import)
+
+```{r}
+# Read each abundance.tsv file
+s1 <- read.table("SRR2156848_quant/abundance.tsv", header = TRUE, sep = "\t")
+s2 <- read.table("SRR2156849_quant/abundance.tsv", header = TRUE, sep = "\t")
+s3 <- read.table("SRR2156850_quant/abundance.tsv", header = TRUE, sep = "\t")
+s4 <- read.table("SRR2156851_quant/abundance.tsv", header = TRUE, sep = "\t")
+
+# Combine into one counts matrix
+counts <- data.frame(
+  row.names = s1$target_id,
+  SRR2156848 = s1$est_counts,
+  SRR2156849 = s2$est_counts,
+  SRR2156850 = s3$est_counts,
+  SRR2156851 = s4$est_counts
+)
+```
+
+## Filter Non-Zero and Variable Transcripts
+
+```{r}
+counts_filtered <- counts[rowSums(counts) > 0, ]
+counts_filtered <- counts_filtered[apply(counts_filtered, 1, sd) > 0, ]
+```
+
+## Principal Component Analysis
+
+```{r}
+pca <- prcomp(t(counts_filtered), scale. = TRUE)
+summary(pca)
+```
+
+## PCA Plotting with ggplot2
+
+```{r}
+pca_df <- as.data.frame(pca$x)
+pca_df$Sample <- rownames(pca_df)
+pca_df$Group <- c("Control", "Control", "CRISPR", "CRISPR")
+
+# PC1 vs PC2
+ggplot(pca_df, aes(x = PC1, y = PC2, color = Group, label = Sample)) +
+  geom_point(size = 4) +
+  geom_text(vjust = -1.2) +
+  labs(title = "PC1 vs PC2") +
+  theme_minimal()
+
+# PC1 vs PC3
+ggplot(pca_df, aes(x = PC1, y = PC3, color = Group, label = Sample)) +
+  geom_point(size = 4) +
+  geom_text(vjust = -1.2) +
+  labs(title = "PC1 vs PC3") +
+  theme_minimal()
+
+# PC2 vs PC3
+ggplot(pca_df, aes(x = PC2, y = PC3, color = Group, label = Sample)) +
+  geom_point(size = 4) +
+  geom_text(vjust = -1.2) +
+  labs(title = "PC2 vs PC3") +
+  theme_minimal()
+```
+
+## Optional: View Kallisto Run Statistics
+
+```{r}
+library(jsonlite)
+info1 <- fromJSON("SRR2156848_quant/run_info.json")
+info2 <- fromJSON("SRR2156849_quant/run_info.json")
+info3 <- fromJSON("SRR2156850_quant/run_info.json")
+info4 <- fromJSON("SRR2156851_quant/run_info.json")
+
+c(
+  SRR2156848 = info1$p_pseudoaligned,
+  SRR2156849 = info2$p_pseudoaligned,
+  SRR2156850 = info3$p_pseudoaligned,
+  SRR2156851 = info4$p_pseudoaligned
+)
+```
+

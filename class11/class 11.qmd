@@ -1,0 +1,69 @@
+---
+title: "Class11: Alpha Fold"
+format: html
+---
+
+Here we read the results from Alpha Fold and try to interpret all the models and quality score metrics:
+```{r}
+library(bio3d)
+
+pth<- "dimer_23119/"
+pdb.files <- list.files(path=pth, full.name=TRUE, pattern = ".pdb")
+```
+
+Align and superpse all these models
+```{r}
+file.exists(pdb.files)
+```
+
+```{r}
+pdbs <- pdbaln(files, fit = TRUE, exefile="msa")
+```
+```{r}
+library(bio3dview)
+view.pdbs(pdbs)
+```
+
+
+```{r}
+plot(pdbs$b[1,],typ="l",ylim=c(0,100))
+lines(pdbs$b[2,], typ="l", col="blue")
+lines(pdbs$b[3,], typ="l", col="green")
+lines(pdbs$b[4,], typ="l", col="orange")
+lines(pdbs$b[5,], typ="l", col="red")
+
+```
+
+```{r}
+library(jsonlite)
+#Listing of all PAE JSON files
+pae_files <- list.files(path=results_dir, pattern=".*model.*\\.json", full.names = TRUE)
+```
+
+
+# Change this for YOUR results dir name
+```{r}
+
+results_dir <- "hivprdimer_23119/" 
+```
+
+```{r}
+# File names for all PDB models
+pdb_files <- list.files(path=results_dir,
+                        pattern="*.a3m$",
+                        full.names = TRUE)
+
+# Print our PDB file names
+basename(pdb_files)
+```
+
+
+
+```{r}
+pdbs
+```
+```{r}
+rd <- rmsd(pdbs, fit=T)
+```
+
+

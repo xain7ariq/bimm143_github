@@ -15,7 +15,7 @@ My classwork from [BIMM143 S25](https://bioboot.github.io/bimm143_S25/) at UC Sa
 
 - 10 [Structural Bioinformatics (pt1)](class10/class10.md)
 
-- 11 [Structural Bioinformatics (pt2 AlphaFold)]([class11/class11.md](https://raw.githubusercontent.com/xain7ariq/bimm143_github/refs/heads/main/class11/class11/class%2011.md)
+- 11 [Structural Bioinformatics (pt2 AlphaFold)]([class11/class11.md](https://github.com/xain7ariq/bimm143_github/blob/main/class11/class11/class%2011.md)
 
 - 12 [Genome informatics and high throughput sequencing](https://github.com/xain7ariq/bimm143_github/blob/main/class12/class12/class12.md)
 

@@ -5,7 +5,7 @@ My classwork from [BIMM143 S25](https://bioboot.github.io/bimm143_S25/) at UC Sa
 
 - 05 [Advanced graphics with **ggplot2**](https://raw.githubusercontent.com/xain7ariq/bimm143_github/refs/heads/main/class05/week05/class07/class07.md)
 
-- 06 [R functions](class06/class06.md)
+- 06 [R functions](https://raw.githubusercontent.com/xain7ariq/bimm143_github/refs/heads/main/class06/class06.md)
 
 - 07 [Machine Learning 1](class07/class07.md)
 

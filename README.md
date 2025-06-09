@@ -3,7 +3,7 @@ My classwork from [BIMM143 S25](https://bioboot.github.io/bimm143_S25/) at UC Sa
 
 - 04 [Into to R]()
 
-- 05 [Advanced graphics with **ggplot2**](https://raw.githubusercontent.com/xain7ariq/bimm143_github/refs/heads/main/class05/week05/class07/class07.md)
+- 05 [Advanced graphics with **ggplot2**](https://github.com/xain7ariq/bimm143_github/blob/main/class04/week04.qmd)
 
 - 06 [R functions]([https://github.com/xain7ariq/bimm143_github/blob/main/class06/class06.md](https://github.com/xain7ariq/bimm143_github/blob/main/class06/class06.md))
 

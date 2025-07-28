@@ -2,7 +2,7 @@
 
 My classwork from [BIMM143 S24](https://bioboot.github.io/bimm143_S25/) at UC San Diego.
 
-- 04 [Intro to R](https://github.com/xain7ariq/bimm143_github/blob/main/class04/class04.md)
+- 04 [Intro to R](https://github.com/xain7ariq/bimm143_github/blob/main/class04/week04.qmd)
 - 05 [Advanced graphics with **ggplot2**](https://github.com/xain7ariq/bimm143_github/blob/main/class05/class05.md)
 - 06 [R functions](https://github.com/xain7ariq/bimm143_github/blob/main/class06/class06.md)
 - 07 [Machine Learning 1](https://github.com/xain7ariq/bimm143_github/blob/main/class07/class07.md)
